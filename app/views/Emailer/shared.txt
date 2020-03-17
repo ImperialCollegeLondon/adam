@@ -1,0 +1,12 @@
+${ownerName} has shared a ${item.type} with you:
+
+#{if item.title}${item.title}#{/if}#{else}${item.path.substring(item.path.lastIndexOf('/') + 1)}#{/else}
+
+
+You can download it directly:
+
+@@{Download.index(item.path)}
+
+Or find it in ADAM:
+
+@@{Application.index}#${item.id}

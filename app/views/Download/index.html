@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Directory: ${path}</title>
+        <style>
+            .directory { background: url(@{'/public/img'}/jqueryFileTree/directory.png) left top no-repeat; padding-left: 24px; }
+            .file { background: url(@{'/public/img'}/jqueryFileTree/file.png) left top no-repeat; padding-left: 24px; }
+            .ext_3gp { background: url(@{'/public/img'}/jqueryFileTree/film.png) left top no-repeat; }
+            .ext_afp { background: url(@{'/public/img'}/jqueryFileTree/code.png) left top no-repeat; }
+            .ext_afpa { background: url(@{'/public/img'}/jqueryFileTree/code.png) left top no-repeat; }
+            .ext_asp { background: url(@{'/public/img'}/jqueryFileTree/code.png) left top no-repeat; }
+            .ext_aspx { background: url(@{'/public/img'}/jqueryFileTree/code.png) left top no-repeat; }
+            .ext_avi { background: url(@{'/public/img'}/jqueryFileTree/film.png) left top no-repeat; }
+            .ext_bat { background: url(@{'/public/img'}/jqueryFileTree/application.png) left top no-repeat; }
+            .ext_bmp { background: url(@{'/public/img'}/jqueryFileTree/picture.png) left top no-repeat; }
+            .ext_c { background: url(@{'/public/img'}/jqueryFileTree/code.png) left top no-repeat; }
+            .ext_cfm { background: url(@{'/public/img'}/jqueryFileTree/code.png) left top no-repeat; }
+            .ext_cgi { background: url(@{'/public/img'}/jqueryFileTree/code.png) left top no-repeat; }
+            .ext_com { background: url(@{'/public/img'}/jqueryFileTree/application.png) left top no-repeat; }
+            .ext_cpp { background: url(@{'/public/img'}/jqueryFileTree/code.png) left top no-repeat; }
+            .ext_css { background: url(@{'/public/img'}/jqueryFileTree/css.png) left top no-repeat; }
+            .ext_doc { background: url(@{'/public/img'}/jqueryFileTree/doc.png) left top no-repeat; }
+            .ext_exe { background: url(@{'/public/img'}/jqueryFileTree/application.png) left top no-repeat; }
+            .ext_gif { background: url(@{'/public/img'}/jqueryFileTree/picture.png) left top no-repeat; }
+            .ext_fla { background: url(@{'/public/img'}/jqueryFileTree/flash.png) left top no-repeat; }
+            .ext_h { background: url(@{'/public/img'}/jqueryFileTree/code.png) left top no-repeat; }
+            .ext_htm { background: url(@{'/public/img'}/jqueryFileTree/html.png) left top no-repeat; }
+            .ext_html { background: url(@{'/public/img'}/jqueryFileTree/html.png) left top no-repeat; }
+            .ext_jar { background: url(@{'/public/img'}/jqueryFileTree/java.png) left top no-repeat; }
+            .ext_jpg { background: url(@{'/public/img'}/jqueryFileTree/picture.png) left top no-repeat; }
+            .ext_jpeg { background: url(@{'/public/img'}/jqueryFileTree/picture.png) left top no-repeat; }
+            .ext_js { background: url(@{'/public/img'}/jqueryFileTree/script.png) left top no-repeat; }
+            .ext_lasso { background: url(@{'/public/img'}/jqueryFileTree/code.png) left top no-repeat; }
+            .ext_log { background: url(@{'/public/img'}/jqueryFileTree/txt.png) left top no-repeat; }
+            .ext_m4p { background: url(@{'/public/img'}/jqueryFileTree/music.png) left top no-repeat; }
+            .ext_mov { background: url(@{'/public/img'}/jqueryFileTree/film.png) left top no-repeat; }
+            .ext_mp3 { background: url(@{'/public/img'}/jqueryFileTree/music.png) left top no-repeat; }
+            .ext_mp4 { background: url(@{'/public/img'}/jqueryFileTree/film.png) left top no-repeat; }
+            .ext_mpg { background: url(@{'/public/img'}/jqueryFileTree/film.png) left top no-repeat; }
+            .ext_mpeg { background: url(@{'/public/img'}/jqueryFileTree/film.png) left top no-repeat; }
+            .ext_ogg { background: url(@{'/public/img'}/jqueryFileTree/music.png) left top no-repeat; }
+            .ext_pcx { background: url(@{'/public/img'}/jqueryFileTree/picture.png) left top no-repeat; }
+            .ext_pdf { background: url(@{'/public/img'}/jqueryFileTree/pdf.png) left top no-repeat; }
+            .ext_php { background: url(@{'/public/img'}/jqueryFileTree/php.png) left top no-repeat; }
+            .ext_png { background: url(@{'/public/img'}/jqueryFileTree/picture.png) left top no-repeat; }
+            .ext_ppt { background: url(@{'/public/img'}/jqueryFileTree/ppt.png) left top no-repeat; }
+            .ext_psd { background: url(@{'/public/img'}/jqueryFileTree/psd.png) left top no-repeat; }
+            .ext_pl { background: url(@{'/public/img'}/jqueryFileTree/script.png) left top no-repeat; }
+            .ext_py { background: url(@{'/public/img'}/jqueryFileTree/script.png) left top no-repeat; }
+            .ext_rb { background: url(@{'/public/img'}/jqueryFileTree/ruby.png) left top no-repeat; }
+            .ext_rbx { background: url(@{'/public/img'}/jqueryFileTree/ruby.png) left top no-repeat; }
+            .ext_rhtml { background: url(@{'/public/img'}/jqueryFileTree/ruby.png) left top no-repeat; }
+            .ext_rpm { background: url(@{'/public/img'}/jqueryFileTree/linux.png) left top no-repeat; }
+            .ext_ruby { background: url(@{'/public/img'}/jqueryFileTree/ruby.png) left top no-repeat; }
+            .ext_sql { background: url(@{'/public/img'}/jqueryFileTree/db.png) left top no-repeat; }
+            .ext_swf { background: url(@{'/public/img'}/jqueryFileTree/flash.png) left top no-repeat; }
+            .ext_tif { background: url(@{'/public/img'}/jqueryFileTree/picture.png) left top no-repeat; }
+            .ext_tiff { background: url(@{'/public/img'}/jqueryFileTree/picture.png) left top no-repeat; }
+            .ext_txt { background: url(@{'/public/img'}/jqueryFileTree/txt.png) left top no-repeat; }
+            .ext_vb { background: url(@{'/public/img'}/jqueryFileTree/code.png) left top no-repeat; }
+            .ext_wav { background: url(@{'/public/img'}/jqueryFileTree/music.png) left top no-repeat; }
+            .ext_wmv { background: url(@{'/public/img'}/jqueryFileTree/film.png) left top no-repeat; }
+            .ext_xls { background: url(@{'/public/img'}/jqueryFileTree/xls.png) left top no-repeat; }
+            .ext_xml { background: url(@{'/public/img'}/jqueryFileTree/code.png) left top no-repeat; }
+            .ext_zip { background: url(@{'/public/img'}/jqueryFileTree/zip.png) left top no-repeat; }
+        </style>
+    </head>
+    <body>
+        <h1>${path[0..-2]}</h1>
+        <table style="border-spacing: 1em 0">
+            #{if parent}
+            <tr>
+                <td><a href="@{index(parent + "/", shared, null)}" class="directory">Parent Directory</a>
+            #{/if}
+            #{list files}
+            <tr>
+                <td><a href="@{index(path, shared, null)}${_.path.split('/')[-1]}#{if _.directory}%2F" class="directory"#{/if}#{else}" target="_blank" class="file ext_${_.name.tokenize('.').last().toLowerCase()}"#{/else}>${_.name}</a>
+                <td style="text-align: right">${_.size().formatSize()}
+                <td>${_.lastModified().asdate(play.Play.configuration.getProperty("date.format"))}
+            #{/list}
+            <tr>
+                <td>&nbsp;
+        </table>
+        <a href="@{index(path, shared, true)}">Download this folder</a>
+    </body>
+</html>

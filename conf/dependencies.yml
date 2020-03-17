@@ -1,0 +1,39 @@
+# Application dependencies
+
+require:
+    - play
+    - play -> secure
+    - play -> crud
+    - org.mongodb -> mongo-java-driver 2.8.0
+    - org.apache.tika -> tika-parsers 1.0
+    - commons-io 2.4
+    - com.google.code.morphia -> morphia 0.99
+    - affymetrix -> AffxFusion 1.1.2
+    - inotify-java 2.0.2
+    - loci_tools 4.3.3
+    - com.sun.jersey -> jersey-core 1.12
+    - com.sun.jersey -> jersey-client 1.12
+    - com.sun.jersey -> jersey-json 1.12
+    - org.elasticsearch -> elasticsearch 0.19.6
+    - com.google.zxing -> zxing-core 2.0
+    - com.google.zxing -> zxing-javase 2.0
+
+repositories:
+    - sonatype:
+        type: iBiblio
+        root: "http://oss.sonatype.org/content/repositories/releases/"
+        contains:
+            - org.elasticsearch
+    - morphia:
+        type: iBiblio
+        root: "http://morphia.googlecode.com/svn/mavenrepo/"
+        contains:
+            - com.google.code.morphia
+    - local:
+        type: local
+        artifact: "${application.path}/repository/[module]-[revision].jar"
+        contains:
+            - affymetrix
+            - inotify-java
+            - com.google.zxing
+            - loci_tools

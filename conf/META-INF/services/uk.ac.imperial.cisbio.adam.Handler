@@ -1,0 +1,9 @@
+uk.ac.imperial.cisbio.adam.handlers.ArticleHandler
+#uk.ac.imperial.cisbio.adam.handlers.DataHandler
+uk.ac.imperial.cisbio.adam.handlers.MicroarrayDatasetHandler
+uk.ac.imperial.cisbio.adam.handlers.MSDatasetHandler
+uk.ac.imperial.cisbio.adam.handlers.NMRDatasetHandler
+#uk.ac.imperial.cisbio.adam.handlers.DirectoryHandler
+uk.ac.imperial.cisbio.adam.handlers.DocumentHandler
+uk.ac.imperial.cisbio.adam.handlers.ImageHandler
+uk.ac.imperial.cisbio.adam.handlers.ScriptHandler

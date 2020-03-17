@@ -1,0 +1,227 @@
+#{extends 'main.html' /}
+#{set title:'ADAM' /}
+#{set 'moreStyles'}
+<style>
+  div.type > a:hover {
+    background: #eee;
+  }
+
+  #fulltext-results div > a:hover {
+    background: #eee;
+  }
+
+  /*plupload override*/
+  .plupload_header {
+    display: none;
+  }
+
+  /*jquery ui override*/
+  .ui-tabs-nav li a {
+    font-size: 14px !important;
+  }
+
+  .ui-widget {
+    font-size: 1em;
+  }
+
+  h1 {
+    font-size: 1em;
+  }
+
+  div.selected {
+    background: whiteSmoke;
+  }
+
+  .facet a.expand {
+    padding-left: 16px;
+    background: url(@{'/public/images/expand.png'}) center left no-repeat;
+  }
+  .facet ul {
+    display: none;
+  }
+
+  .facet.expanded a.expand {
+    background: url(@{'/public/images/collapse.png'}) center left no-repeat;
+  }
+  .facet.expanded ul {
+    display: block;
+  }
+</style>
+#{/set}
+#{set 'moreScripts'}
+<script>
+  var data = ${data.json().raw()};
+  var user, users;
+</script>
+<script src="@{'/public/javascripts/adam.js'}"></script>
+#{/set}
+
+<div id="tabs">
+  <ul>
+    <li><a href="#tabs-data">Browse</a></li>
+    <li><a href="#tabs-search">Search</a></li>
+    <li><a href="#tabs-files">Files</a></li>
+    <li><a href="#tabs-upload">Upload</a></li>
+    <li><a href="#tabs-prefs">Preferences</a></li>
+    <li><a href="#tabs-help">Help</a></li>
+  </ul>
+  <div id="tabs-data">
+    <form id="search" action="@{WS.search}">
+      <input type="hidden" name="q">
+      <input type="hidden" name="type">
+      <input type="hidden" name="tag">
+      <input type="hidden" name="owner">
+      <input type="hidden" name="year">
+      <input type="hidden" name="language">
+      <input type="hidden" name="author">
+      <input type="hidden" name="journal">
+      <input type="hidden" name="mesh">
+      <input type="hidden" name="year">
+      <input type="hidden" name="starred">
+      <input type="hidden" name="sort" value="modified_at">
+      <input type="hidden" name="page" value="0">
+    </form>
+    <table style="width: 100%; border-collapse: collapse;">
+      <tr style="vertical-align: top; height: 100%">
+        <td id="results" style="width: 20em; padding: 0">
+        <td id="preview" style="background: whiteSmoke; border-top: 1em solid white; padding: 1em" rowspan="2">
+        <td style="width: 15em; padding: 1em" rowspan="2">
+          <div style="padding-bottom: 0.5em; font-weight: bold;">Search:</div><input id="q" name="q" size="16" type="search" placeholder="Title" autofocus style="margin-bottom: 1em"><button class="clear" style="display: none">x</button>
+          <div style="padding-bottom: 0.5em; font-weight: bold;">Filter:</div><input id="starred" name="starred" type="checkbox" value="true"><label for="starred">Starred</label><div id="filter" style="padding-bottom: 1em"></div>
+          <span style="font-weight: bold">Order:</span><div id="sort" style="padding-top: 0.5em"><input id="uploaded" type="radio" name="sort" value="created_at"><label for="uploaded">Uploaded</label><br><input id="modified" type="radio" name="sort" value="modified_at" checked><label for="modified">Modified</label><br><input id="name" type="radio" name="sort" value="name"><label for="name">Name</label></div>
+      <tr style="vertical-align: bottom">
+        <td style="padding: 1em 0 0 0"><div id="paging"></div>
+    </table>
+  </div>
+  <div id="tabs-search">
+    <form id="fulltext" action="@{WS.fulltext}">
+      Search: <input type="search" name="term" placeholder="Text" autofocus><button type="button" class="clear" style="display: none">x</button>
+    </form>
+    <div id="fulltext-results" style="padding-top: 1em"></div>
+  </div>
+  <div id="tabs-files">
+    <div id="files"></div>
+  </div>
+  <div id="tabs-upload">
+    <label for="upload-location">Upload folder:</label>
+    <select id="upload-location"></select>
+    <div id="html5_uploader">Your browser doesn't support native upload</div>
+  </div>
+  <div id="tabs-prefs">
+    <form id="prefs" action="@{WS.prefs}" method="POST">
+      <label>My name, as displayed to other users (required): <input name="cn" type="text" size="16"></label><br>
+      <label>My email address, for notification of shared files: <input name="email" type="email" size="32"></label><br>
+    </form>
+  </div>
+  <div id="tabs-help"></div>
+  <div id="tabs-analytics" style="display: none">
+    <span id="chart_1"></span>
+    <span id="chart_2"></span>
+    <span id="chart_3"></span>
+    <div id="stats" style="margin-top: 1em"></div>
+  </div>
+</div>
+
+<script id="helptemplate" type="text/x-jquery-tmpl">
+  <p>Upload data using the <b>Upload</b> tab or the network drive \\${request.domain}\homes</p>
+  <p>Browse and download your data using the <b>Browse</b> or <b>Files</b> tabs, or the network drive</p>
+  <p>You are have uploaded a total of {{= user.itemCount}} files ({{= user.diskUsage}})</p>
+  <p>Click <a href="@{Credentials.index}">here</a> to change your password</p>
+  <p>Click <a href="@{Secure.logout}">here</a> to logout</p>
+</script>
+<script id="fulltext-template" type="text/x-jquery-tmpl">
+  <div>
+    <img src="@{'/public/img'}/jqueryFileTree/{{= icon(this.data)}}.png">
+    <a href='#' style="text-decoration: none">{{= splitLast(path, '/')}}</a>
+    <dl style="padding-left: 2em; margin-top: 0.5em">
+      {{each highlightFields}}
+      <dt>{{= initialCap($index)}}:
+      <dd>{{html $value}}
+      {{/each}}
+    </dl>
+  </div>
+</script>
+<script id="template" type="text/x-jquery-tmpl">
+  <div id="{{= _id.$oid}}" class="type {{= type}}{{if $item.data.owner != user.id}} shared{{/if}}" style="margin-left: 20px; padding-right: 1em">
+    <img src="@{'/public/img'}/jqueryFileTree/{{= icon(this.data)}}.png">
+    <form style="display: inline" action="@{WS.favourite}" method="POST"><input type="hidden" name="id" value="{{= _id.$oid}}"><input type="image" src="@{'/public/img'}/{{if favourite}}starred{{else}}unstarred{{/if}}.png"></form>
+    {{if $item.data.owner != user.id}}<img src="@{'/public/img'}/user.png">{{else shared}}<img src="@{'/public/img'}/world.png">{{else recipient}}<img src="@{'/public/img'}/group.png">{{/if}}
+    <a href='#' style="text-decoration: none">{{= splitLast(path, '/')}}</a>
+  </div>
+</script>
+<script id="detailspartial" type="text/x-jquery-tmpl">
+  {{if thumbnail}}<a style="float: right" href="@{Download.index}?{{= param({path: path})}}" target="_blank" class="thumbnail"><img src="@{WS.attachment}?id={{= _id.$oid}}&name=thumbnail" style="margin: 0 0 1em 1em; border: 0"></a>{{/if}}
+  <span style="font-weight: bold">{{if $item.data.title && $item.data.title != name}}{{= title}}{{else}}{{= name}}{{/if}}</span><br>
+  {{tmpl '#' + type + 'partial'}}
+  <div style="color: #696969; margin-top: 1em">
+    <!--upload info-->
+    {{= initialCap(type)}}{{if subtype}} ({{= subtype}}){{/if}} {{= bytesToSize(size * 1024)}}<br>
+    Uploaded {{= localeString(created_at)}}{{if $item.data.owner != user.id}} by {{= owner}}{{/if}}<br>
+    Modified {{= localeString(modified_at)}}<br>
+    <a href="@{Download.index}?{{= param({path: path})}}" target="_blank">{{= path}}</a><br><br>
+    <!--tagging-->
+    {{if $item.data.owner == user.id}}Tags:<ul style="margin-top: 0px; margin-bottom: 4px">{{each tags}}<li><form action="@{WS.tag}?x-http-method-override=DELETE" method="POST">{{= $value}}<input type="hidden" name="tag" value="{{= $value}}"><input type="hidden" name="id" value="{{= _id.$oid}}"><input type="image" src="@{'/public/img'}/tag_blue_delete.png" style="margin-left: 4px"></form>{{/each}}<li><form action="@{WS.tag}" method="POST"><input name="tag" size="8"><input type="hidden" name="id" value="{{= _id.$oid}}"></form></ul>{{/if}}<br>
+    <!--sharing-->
+    {{if $item.data.owner == user.id}}<form style="display: inline-block" action="@{WS.share}" method="POST"><input type="hidden" name="id" value="{{= _id.$oid}}">Share with <select name="recipient"><optgroup label="Users">{{each users}}<option{{if $item.data.recipient == $value}} selected{{/if}}>{{= $value}}{{/each}}<optgroup label="Groups">{{each user.groups}}<option{{if $item.data.recipient == $value}} selected{{/if}}>{{= $value}}{{/each}}<optgroup label="Other"><option value=""{{if !$item.data.shared && !$item.data.recipient}} selected{{/if}}>private<option{{if shared}} selected{{/if}}>public</select>{{if shared}} <a href="@{Download.index}?{{= param({'path': path, shared: shared})}}" target="_blank">link</a>{{/if}}</form><br>{{/if}}
+  </div>
+</script>
+<script id="articlepartial" type="text/x-jquery-tmpl">
+  {{= creator.join(", ")}}.<br>
+  {{= source}}. {{= date}}.<br>
+  {{if identifier}}<strong>DOI:</strong> <a href="http://dx.doi.org/{{= identifier}}" target="_blank">{{= identifier}}</a><br>{{/if}}
+  {{if mesh}}<strong>MeSH:</strong> {{= mesh.join(", ")}}<br>{{/if}}
+  <div class="similar" data-pmid="{{= pmid}}"><a href="#">Similar Articles...</a></div>
+</script>
+<script id="scriptpartial" type="text/x-jquery-tmpl">
+  {{= line_count}} lines<br>
+</script>
+<script id="documentpartial" type="text/x-jquery-tmpl">
+  {{if word_count}}{{= word_count}} words {{if language}}({{= language}}){{/if}}<br>{{/if}}
+  {{if last_author}}Last modified by {{= last_author}} at {{= localeString(modified)}}</span><br>{{/if}}
+  {{if entities}}Mentions:<ul style="margin: 0">{{each entities}}<li><a href="{{if type == 'protein'}}http://www.uniprot.org/uniprot/?query={{else type == 'compound'}}http://www.ebi.ac.uk/chebi/advancedSearchFT.do?searchString={{else type == 'GO term'}}http://amigo.geneontology.org/cgi-bin/amigo/search.cgi?search_constraint=term&exact_match=1&action=new-search&search_query={{else type == 'disease'}}http://en.wikipedia.org/wiki/Special:Search?search={{/if}}{{= escape(text)}}" target='_blank'>{{= text}}</a> ({{= type}}){{/each}}</ul>{{/if}}
+  <a href="@{WS.text}?id={{= _id.$oid}}" class="mobile">Send to my mobile...</a><br>
+</script>
+<script id="imagepartial" type="text/x-jquery-tmpl">
+  {{if barcode}}{{if organism}}XperimentR: {{= organism}}{{else}}Barcode: <a href="http://www.upcdatabase.com/item/{{= barcode}}" target="_blank">{{= barcode}}</a>{{/if}}<br>{{/if}}
+  {{if image_count > 1}}{{= image_count}} images<br>{{/if}}
+</script>
+<script id="similartemplate" type="text/x-jquery-tmpl">
+  <ul>
+      {{each result}}
+      <li><a href="http://www.ncbi.nlm.nih.gov/pubmed/{{= Id}}" target="_blank">{{= strip(Title)}}</a></li>
+      {{/each}}
+  </ul>
+</script>
+<script id="folderpartial" type="text/x-jquery-tmpl">
+  {{= fileCount}} files<br>
+</script>
+<script id="datasetpartial" type="text/x-jquery-tmpl">
+  {{if array_type}}Array type: {{if geo_platform}}<a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc={{= geo_platform}}" target="_blank">{{/if}}{{= array_type}}{{if geo_platform}}</a>{{/if}}<br>Algorithm: {{= algorithm}}<br>{{/if}}
+  {{if assays}}{{= assays }} assay(s), last acquisition {{= localeString(modified)}}{{else}}{{if modified}}Acquired {{= localeString(modified)}}{{/if}}{{/if}}<br>
+</script>
+<script id="pagingtemplate" type="text/x-jquery-tmpl">
+  {{if of > 0}}Page {{= page + 1}} of {{= of}}{{if page > 0}} <a href="#" data-page="{{= page - 1}}">prev</a>{{else}} <span style="color: #696969">prev</span>{{/if}}{{if page + 1 < of}} <a href="#" data-page="{{= page + 1}}">next</a>{{else}} <span style="color: #696969">next</span>{{/if}}{{/if}}
+</script>
+<script id="statstemplate" type="text/x-jquery-tmpl">
+  <b>{{= totalUsers}}</b> users have uploaded <b>{{= totalFileCount}}</b> files, totalling <b>{{= totalFileSize}}</b>. The most recent file was uploaded on <b>{{= localeString(latestFile)}}</b>.
+</script>
+<script id="sharetemplate" type="text/x-jquery-tmpl">
+  <div title="Item shared">Your data is now available using this link:<p><a href="{{= link}}" target="_blank">{{= link}}</a></p>This link can be emailed to anyone who needs access. You can revoke access at any time.</div>
+</script>
+<script id="filtertemplate" type="text/x-jquery-tmpl">
+  {{each(i, facet) facets}}
+    {{if facet.values.length}}
+    <div class="facet{{if facetEquals(facet.name, '')}}{{else}} expanded{{/if}}">
+      <a href="#" class="expand" style="text-decoration: none;">{{= initialCap(facet.name)}}</a>{{if facetEquals(facet.name, '')}}{{else}} <a href="#" class="facet" data-facet="{{= facet.name}}">x</a>{{/if}}
+      <ul style="margin-top: 0.5em; padding-left: 16px; list-style-type: none;">
+      {{each facet.values}}
+        <li>
+        {{if facetEquals(facet.name, '')}}<a href="#" class="facet" data-facet="{{= facet.name}}" data-facet-value="{{= $value}}">{{/if}}
+        {{= $value}}
+        {{if facetEquals(facet.name, '')}}</a>{{/if}}
+      {{/each}}
+      </ul>
+    </div>
+    {{/if}}
+  {{/each}}
+</script>

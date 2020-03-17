@@ -1,0 +1,5 @@
+%prod.mail.smtp.host=mailhost.domain
+%prod.application.baseUrl=http://webhost.domain
+email=My Name <my.name@domain>
+entrezajax.apikey=xxx
+crossref.pid=email@domain

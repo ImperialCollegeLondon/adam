@@ -1,0 +1,11 @@
+.svn/
+/.settings/
+/conf/application-site.conf
+/data/
+/eclipse/
+/lib/
+/modules/
+/test/
+/tmp/
+/.classpath
+/.project

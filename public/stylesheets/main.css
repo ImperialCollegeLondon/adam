@@ -1,0 +1,13 @@
+div.type > a:hover {
+  background: #eee;
+}
+
+/*plupload override*/
+.plupload_header {
+  display: none;
+}
+
+/*jquery ui override*/
+.ui-tabs-nav li a {
+  font-size: 14px !important;
+}

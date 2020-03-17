@@ -1,0 +1,5 @@
+User(admin):
+    id: admin
+    password: admin
+    admin: true
+    cn: Admin
